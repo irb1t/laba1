@@ -1,19 +1,42 @@
 def convert_hex_to_words(hex_number):
-    """Преобразует шестнадцатеричное число в строку, заменяя четные цифры на слова."""
-    digit_to_word = {'0': 'ноль', '2': 'два', '4': 'четыре', '6': 'шесть', '8': 'восемь', 'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D', 'E': 'E', 'F': 'F', '1': '1', '3': '3', '5': '5', '7': '7', '9': '9'}
-    return ' '.join(digit_to_word[digit].upper() if digit.isalnum() else digit for digit in hex_number.upper())
+    """
+    Преобразует шестнадцатеричное число в строку.
+    Заменяет четные цифры на слова и возвращает результат.
+    """
+    # Словарь для замены шестнадцатеричных цифр на слова
+    digit_to_word = {
+        '0': 'ноль', '2': 'два', '4': 'четыре',
+        '6': 'шесть', '8': 'восемь', 'A': 'A', 
+        'B': 'B', 'C': 'C', 'D': 'D',
+        'E': 'E', 'F': 'F', '1': '1',
+        '3': '3', '5': '5', '7': '7', '9': '9'
+    }
 
+    # Преобразование и возврат результата
+    return ' '.join(digit_to_word[digit] for digit in hex_number.upper())
 def filter_and_sort_hex_numbers(words):
-    """Фильтрует и сортирует список шестнадцатеричных чисел."""
+    """
+    Фильтрует список строк, оставляя только те, что начинаются на 'B',
+    и сортирует отфильтрованный список по возрастанию.
+    """
+    # Фильтрация: оставляем только строки, начинающиеся на 'B'
     filtered_hex_numbers = [word for word in words if word.startswith('B')]
-    return sorted(filtered_hex_numbers, key=lambda x: int(x, 16))
 
+    # Сортировка списка по числовому значению шестнадцатеричных чисел
+    return sorted(filtered_hex_numbers, key=lambda x: int(x, 16))
 def process_file(filename):
+    """
+    Читает файл, фильтрует и сортирует строки, предствляющие собой шестнадцатеричные числа.
+    Затем преобразует каждое число и выводит результат.
+    """
     with open(filename, 'r') as file:
         for line in file:
+            # Разделение строки на слова
             words = line.strip().split()
+            
+            # Фильтрация и сортировка найденных шестнадцатеричных чисел
             hex_numbers = filter_and_sort_hex_numbers(words)
+            
             for hex_number in hex_numbers:
+                # Вывод каждого числа и его преобразованной формы
                 print(f"{hex_number} -> {convert_hex_to_words(hex_number)}")
-
-process_file("input.txt")
