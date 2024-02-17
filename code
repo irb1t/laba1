@@ -1,1 +1,19 @@
+def convert_hex_to_words(hex_number):
+    """Преобразует шестнадцатеричное число в строку, заменяя четные цифры на слова."""
+    digit_to_word = {'0': 'ноль', '2': 'два', '4': 'четыре', '6': 'шесть', '8': 'восемь', 'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D', 'E': 'E', 'F': 'F', '1': '1', '3': '3', '5': '5', '7': '7', '9': '9'}
+    return ' '.join(digit_to_word[digit].upper() if digit.isalnum() else digit for digit in hex_number.upper())
 
+def filter_and_sort_hex_numbers(words):
+    """Фильтрует и сортирует список шестнадцатеричных чисел."""
+    filtered_hex_numbers = [word for word in words if word.startswith('B')]
+    return sorted(filtered_hex_numbers, key=lambda x: int(x, 16))
+
+def process_file(filename):
+    with open(filename, 'r') as file:
+        for line in file:
+            words = line.strip().split()
+            hex_numbers = filter_and_sort_hex_numbers(words)
+            for hex_number in hex_numbers:
+                print(f"{hex_number} -> {convert_hex_to_words(hex_number)}")
+
+process_file("input.txt")
