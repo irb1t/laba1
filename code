@@ -1,138 +1,53 @@
-dir={ '0':'ноль',
-      '1':'один',
-      '2':'два',
-      '3':'три',
-      '4':'четыре',
-      '5':'пять',
-      '6':'шесть',
-      '7':'семь',
-      '8':'восемь',
-      '9':'девять'}
-#словарь
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-len = 0 #длинна списка
-a=0
-acces=0
-list=[]
-arry=[]
-file=[] #список для файла
+// Функция для преобразования числа в строку в зависимости от правила
+char* convertNumber(const char* number) {
+    static char result[256];
+    strcpy(result, ""); // Очищаем результат
 
-k_num=input('введите число k=') #переменная К
-while acces!=1:#фильтрация ввода
+    int length = strlen(number);
+    for (int i = 0; i < length; ++i) {
+        switch (number[i]) {
+            case '2':
+                strcat(result, "два ");
+                break;
+            case '4':
+                strcat(result, "четыре ");
+                break;
+            case '6':
+                strcat(result, "шесть ");
+                break;
+            case '8':
+                strcat(result, "восемь ");
+                break;
+            case '0':
+                strcat(result, "ноль ");
+                break;
+            default:
+                // Добавляем нечетную цифру без изменений
+                strncat(result, &number[i], 1);
+                strcat(result, " ");
+                break;
+        }
+    }
+    return result;
+}
 
-    for y in k_num:#сравниваем длинну с кол-во цифр
-        len=len+1
-        if y == '1' or y == '2' or y == '3' or y == '4' or y == '5' or y == '6' or y == '7' or y == '8' or y == '9' or y == '0':
-            a=a+1
+// Главная функция
+int main() {
+    FILE *file = fopen("input.txt", "r"); // Открыть файл для чтения
+    if (file == NULL) {
+        perror("Failed to open file");
+        return 1;
+    }
 
-            continue
-        else:
+    char word[100];
+    while (fscanf(file, "%s", word) != EOF) { // Читать лексемы до конца файла
+        printf("%s -> %s\n", word, convertNumber(word));
+    }
 
-            continue
-    if len==a: #если ввели только цифры то длнна с их кол-во совпадет
-        k_num = int(k_num)
-        acces=acces+1
-        continue
-    else: #если нет ,просим ввести корректно
-        len=0
-        a=0
-        print('Введите число без символов')
-        k_num = input('введите число k=')
-        continue
-
-
-
-# /////файл сюда/////
-# /////файл сюда/////
-# /////файл сюда/////
-file=open('hello.txt')
-# /////файл сюда/////
-# /////файл сюда/////
-# /////файл сюда/////
-
-
-for i in file:#переносим данные из файла в список
-    len=len+1
-    list.append(i)
-
-
-if len==0:  #проверка на пустой файл
-    print('файл пустой')
-
-else: #если в файле есть данные
-    len=0
-
-    list_str=''.join(list) #обединяем символы в списке в одну строку
-
-    arry.append(list_str) #добавляем строку в список
-
-    i=0 #вспомогательная переменная
-
-    list.clear() # очистка для повторного использования
-    for y in arry[i]:
-        list.append(y)
-        i=i+1
-
-
-
-
-    arry.clear()#очищаем для повторного использования
-
-    for y in list:#вынимаем числа из списка list и добовляем их в arry
-        # (любой иной символ  служит как триггер, что пора вывести число на экран)
-
-        if y == '1' or y == '2' or y == '3' or y == '4' or y == '5' or y == '6' or y == '7' or y == '8' or y == '9'or y=='0':
-            arry.append(y)
-
-        else:
-            for i in arry:#любой символ кроме чисел не добовляется в список
-                len=len+1
-            if len==0:
-                continue
-            else:
-
-
-                num=''.join(arry)#делаем из символов списка arry, строку num, затем в целое число
-                num = int(num)
-
-                if num % 2==0 and len>k_num  and len%2!=0: #проверяем четность,длинну,и нечетность длинны
-                    print(num)
-                    for i in arry:#после вывода число выводим прописью использованные цифры
-
-                            print(dir[i])
-                    len=0
-                    arry.clear()
-                    num=0
-                    print('-----------')
-
-                    continue
-                else:     # указываем причину не соответсвия числа требованию задания
-                    if len<k_num:
-                        print('длинна меньше числа k')
-                        print('-----------')
-                        len = 0
-                        num=0
-                        arry.clear() #очищаем список и продолжаем цикл до конца
-                        continue
-                    elif num % 2!=0:
-                        print(' число не чётное')
-                        print('-----------')
-                        len = 0
-                        num=0
-                        arry.clear() #очищаем список и продолжаем цикл до конца
-                        continue
-                    else:
-                        print(' нечётна длинна числа ')
-                        print('-----------')
-                        len = 0
-                        num = 0
-                        arry.clear()  # очищаем список и продолжаем цикл до конца
-
-
-
-
-
-
-
-
-    file.close()#закрываем файл
+    fclose(file); // Закрыть файл
+    return 0;
+}
